@@ -1,76 +1,72 @@
-CREATE SCHEMA IF NOT EXISTS banking;
-SET search_path TO banking;
-
-create table accounts
+CREATE TABLE banking_accounts
 (
-    id           serial
-        primary key,
-    status       varchar(20) default 'active'::character varying not null
+    id     serial PRIMARY KEY,
+    status VARCHAR(20) DEFAULT 'active' NOT NULL
 );
 
-create table transactions
+CREATE TABLE banking_transactions
 (
-    id                     bigserial
-        primary key,
-    account_id integer                                                        not null
-        references accounts,
-    transaction_type       varchar(20)                                        not null,
-    amount                 bigint                                             not null,
-    created_at             timestamp with time zone default CURRENT_TIMESTAMP not null,
-    description            text                                               not null,
-    status                 varchar(20)                                        not null,
-    related_transaction_id bigint
-        constraint transactions_transactions__fk
-            references transactions
+    id                     BIGSERIAL PRIMARY KEY,
+    account_id             INTEGER                                            NOT NULL REFERENCES banking_accounts,
+    transaction_type       VARCHAR(20)                                        NOT NULL,
+    amount                 BIGINT                                             NOT NULL,
+    created_at             TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    description            TEXT                                               NOT NULL,
+    status                 VARCHAR(20)                                        NOT NULL,
+    related_transaction_id BIGINT REFERENCES banking_transactions
 );
 
-create table accounts_statements
+CREATE TABLE banking_accounts_statements
 (
-    id           bigserial
-        primary key,
-    account_id integer             not null
-        references accounts,
-    balance bigint default 5000000 not null,
-    created_at   timestamp with time zone not null
+    id         BIGSERIAL PRIMARY KEY,
+    account_id INTEGER                  NOT NULL REFERENCES banking_accounts,
+    balance    BIGINT DEFAULT 5000000   NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
-create view accounts_balance as
-select
-    accounts.id,
-    accounts.status,
-    coalesce(statements.balance, 0) +
-    coalesce(sum(transactions.amount * case when transactions.transaction_type = 'DEPOSIT' then 1 else -1 end)::bigint, 0) -- potentially dangerous casting to bigint if transactions for a given account overflow.
-        as balance
-from accounts
-         left join accounts_statements statements on accounts.id = statements.account_id
-         left join transactions on accounts.id = transactions.account_id
-group by accounts.id, statements.balance;
+
+CREATE OR REPLACE VIEW banking_accounts_balance AS
+SELECT banking_accounts.id,
+       banking_accounts.status,
+       COALESCE(banking_accounts_statements.balance, 0) +
+       COALESCE(SUM(banking_transactions.amount *
+                    CASE WHEN banking_transactions.transaction_type = 'DEPOSIT' THEN 1 ELSE -1 END)::BIGINT,
+                0) AS balance
+FROM banking_accounts
+         LEFT JOIN
+     banking_accounts_statements ON banking_accounts.id = banking_accounts_statements.account_id
+         LEFT JOIN
+     banking_transactions ON banking_accounts.id = banking_transactions.account_id
+GROUP BY banking_accounts.id, banking_accounts_statements.balance;
 
 
-
-CREATE OR REPLACE FUNCTION banking.transfer(
+CREATE OR REPLACE FUNCTION transfer(
     p_from_account_id INTEGER,
     p_to_account_id INTEGER,
     p_amount BIGINT,
     p_description VARCHAR
 )
-    RETURNS TABLE (
-                      amount BIGINT,
-                      description VARCHAR,
-                      status VARCHAR,
-                      created_at TIMESTAMP WITH TIME ZONE
-                  )
-    LANGUAGE plpgsql AS $$
+    RETURNS TABLE
+            (
+                amount      BIGINT,
+                description VARCHAR,
+                status      VARCHAR,
+                created_at  TIMESTAMP WITH TIME ZONE
+            )
+    LANGUAGE plpgsql
+AS
+$$
 DECLARE
     v_from_account_balance BIGINT;
-    v_to_account_balance BIGINT;
-    v_status VARCHAR := 'COMPLETE';
-    v_now TIMESTAMP WITH TIME ZONE := NOW();
-    v_transaction_id BIGINT;
+    v_to_account_balance   BIGINT;
+    v_status               VARCHAR                  := 'COMPLETE';
+    v_now                  TIMESTAMP WITH TIME ZONE := NOW();
+    v_transaction_id       BIGINT;
 BEGIN
     -- Get the balance for the from_account
-    SELECT balance INTO v_from_account_balance
-    FROM banking.accounts_balance
+    SELECT balance
+    INTO v_from_account_balance
+    FROM banking_accounts_balance
     WHERE id = p_from_account_id;
 
     -- Check if from_account exists and has sufficient funds
@@ -81,8 +77,9 @@ BEGIN
     END IF;
 
     -- Get the balance for the to_account
-    SELECT balance INTO v_to_account_balance
-    FROM banking.accounts_balance
+    SELECT balance
+    INTO v_to_account_balance
+    FROM banking_accounts_balance
     WHERE id = p_to_account_id;
 
     -- Check if to_account exists
@@ -91,15 +88,13 @@ BEGIN
     END IF;
 
     -- Insert transactions for withdrawal from from_account
-    INSERT INTO banking.transactions (account_id, transaction_type, amount, description, status)
-    VALUES
-        (p_from_account_id, 'WITHDRAWAL', p_amount, p_description, v_status)
+    INSERT INTO banking_transactions (account_id, transaction_type, amount, description, status)
+    VALUES (p_from_account_id, 'WITHDRAWAL', p_amount, p_description, v_status)
     RETURNING id INTO v_transaction_id;
 
     -- Insert transactions for deposit to to_account with related_transaction_id
-    INSERT INTO banking.transactions (account_id, transaction_type, amount, description, status, related_transaction_id)
-    VALUES
-        (p_to_account_id, 'DEPOSIT', p_amount, p_description, v_status, v_transaction_id);
+    INSERT INTO banking_transactions (account_id, transaction_type, amount, description, status, related_transaction_id)
+    VALUES (p_to_account_id, 'DEPOSIT', p_amount, p_description, v_status, v_transaction_id);
 
     -- Set the return values
     amount := p_amount;
