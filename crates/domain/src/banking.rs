@@ -73,7 +73,7 @@ impl Transaction {
             Transaction,
             r#"
             SELECT id, transaction_type, amount, description, status, related_transaction_id, created_at
-            FROM banking.transactions
+            FROM banking_transactions
             WHERE id = ANY($1)
             "#,
             ids
@@ -94,7 +94,7 @@ impl Account {
             VALUES ('ACTIVE')
             RETURNING id
         )
-        INSERT INTO banking.transactions (account_id, transaction_type, amount, description, status, related_transaction_id)
+        INSERT INTO banking_transactions (account_id, transaction_type, amount, description, status, related_transaction_id)
         VALUES
             ((SELECT id FROM NewAccount), 'DEPOSIT', 5000000, 'INITIAL_DEPOSIT', 'COMPLETE', NULL)
         RETURNING id::INTEGER;
@@ -120,7 +120,7 @@ impl Account {
             Account,
             r#"
             SELECT id as "id!", status as "status!", balance as "balance!"
-            FROM banking.accounts_balance
+            FROM banking_accounts_balance
             WHERE id = $1
             "#,
             account_id
@@ -132,7 +132,7 @@ impl Account {
             Transaction,
             r#"
             SELECT id, transaction_type, amount, description, status, related_transaction_id, created_at
-            FROM banking.transactions
+            FROM banking_transactions
             WHERE account_id = $1
             "#,
             account_id
@@ -160,7 +160,7 @@ impl Transfer {
         let transfer_recap = sqlx::query!(
             r#"
                 SELECT *
-                FROM banking.transfer($1, $2, $3, $4)
+                FROM transfer($1, $2, $3, $4)
             "#,
             from_account_id,
             to_account_id,
@@ -191,7 +191,7 @@ impl Statement {
                 SELECT
                     account_id,
                     COALESCE(SUM(CASE WHEN transaction_type = 'DEPOSIT' THEN amount ELSE -amount END), 0)::bigint AS current_balance
-                FROM banking.transactions
+                FROM banking_transactions
                 WHERE EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM NOW())
                   AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM NOW())
                 GROUP BY account_id
@@ -200,13 +200,13 @@ impl Statement {
                 SELECT
                     account_id,
                     COALESCE(balance, 0) AS previous_balance
-                FROM banking.accounts_statements
+                FROM banking_accounts_statements
                 WHERE (EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM NOW()) - 1
                        AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM NOW()))
                     OR (EXTRACT(MONTH FROM created_at) = 12
                         AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM NOW()) - 1)
             )
-            INSERT INTO banking.accounts_statements (account_id, balance)
+            INSERT INTO banking_accounts_statements (account_id, balance)
             SELECT
                 cm.account_id,
                 COALESCE(cm.current_balance, 0) + COALESCE(pb.previous_balance, 0) AS balance

@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 axum = { version = "0.6.20", features = ["macros"] }
 tokio = { version = "1.25.0", features = ["full", "rt-multi-thread", "macros"] }
-sqlx = { version = "0.7.1", features = [ "runtime-tokio-rustls", "bigdecimal", "chrono", "postgres", "macros"] }
+sqlx = { version = "0.7.1", features = ["runtime-tokio-rustls", "bigdecimal", "chrono", "postgres", "macros", "uuid"] }
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 tower = "0.4.13"
@@ -15,3 +15,4 @@ chrono = { version = "0.4.31", features = ["serde"] }
 serde = { version = "1.0.188", features = ["derive"] }
 anyhow = { version = "1.0.75", features = [] }
 domain = { version = "0.1.0", path = "../domain" }
+uuid = { version = "1.4.1", features = ["v4", "serde"] }

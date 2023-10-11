@@ -1,5 +1,5 @@
 use sqlx::postgres::PgPool;
-use axum::{extract::{self, State}, Json, debug_handler, Router, routing::{post,get}};
+use axum::{extract::{self, State}, Json, Router, routing::{post,get}};
 use serde::{Deserialize, Serialize};
 
 use domain::banking::{Account, AccountData, Statement, Transaction, Transfer, TransferRecap};
@@ -8,8 +8,6 @@ pub struct BankingRouter;
 
 impl BankingRouter {
     pub fn new_router(pool: PgPool) -> Router {
-        println!("Creating pool");
-
         Router::new()
             .route("/create-account", post(create_account))
             .route("/get-account-data", get(get_account_data))
@@ -25,13 +23,11 @@ pub struct TransactionIds {
     ids: Vec<i64>,
 }
 
-#[debug_handler]
 pub async fn get_transactions(State(pool): State<PgPool>, extract::Json(payload): extract::Json<TransactionIds>) -> Json<Vec<Transaction>> {
     let transactions = Transaction::get_transactions(pool, &payload.ids).await.unwrap();
     Json(transactions)
 }
 
-#[debug_handler]
 pub async fn create_account(State(pool): State<PgPool>) -> Json<i32> {
     let account_id = Account::create_account(pool).await.unwrap();
     Json(account_id)
@@ -41,7 +37,6 @@ pub async fn create_account(State(pool): State<PgPool>) -> Json<i32> {
 pub struct AccountId {
     id: i32,
 }
-#[debug_handler]
 pub async fn get_account_data(State(pool): State<PgPool>, extract::Json(payload): extract::Json<AccountId>) -> Json<AccountData> {
     let account_data = Account::get_account_data(pool, payload.id.into() ).await.unwrap();
     Json(account_data)
@@ -55,7 +50,6 @@ pub struct TransferPayload {
     description: String,
 }
 
-#[debug_handler]
 pub async fn transfer(
     State(pool): State<PgPool>,
     extract::Json(payload): Json<TransferPayload>
@@ -66,7 +60,6 @@ pub async fn transfer(
     Json(transfer_recap)
 }
 
-#[debug_handler]
 pub async fn generate_statements(State(pool): State<PgPool>) -> Json<()> {
     Statement::generate_statements(pool).await.unwrap();
     Json(())
