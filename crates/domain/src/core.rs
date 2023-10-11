@@ -142,7 +142,7 @@ impl Section {
             SELECT DISTINCT ON (section_id)
                 id, created_by, section_id, locked, title, content, created_at, updated_at
             FROM topics
-            ORDER BY section_id, created_at DESC
+            ORDER BY section_id, updated_at DESC
         ),
         RecentPosts AS (
             SELECT DISTINCT ON (topic_id)
@@ -294,12 +294,17 @@ impl Post {
                 SELECT locked
                 FROM topics
                 WHERE id = $1
+            ),
+            InsertPost (
+                INSERT INTO posts (topic_id, created_by, content)
+                SELECT $1, $2, $3
+                FROM TopicStatus
+                WHERE NOT locked
+                RETURNING id;
             )
-            INSERT INTO posts (topic_id, created_by, content)
-            SELECT $1, $2, $3
-            FROM TopicStatus
-            WHERE NOT locked
-            RETURNING id;
+            UPDATE topics
+            SET updated_at = now()
+            WHERE id = $1
         "#;
 
         let row = sqlx::query(query)
