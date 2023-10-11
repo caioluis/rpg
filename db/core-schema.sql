@@ -1,43 +1,39 @@
-CREATE TABLE section (
-    id SMALLSERIAL NOT NULL,
-    parent_section_id SMALLINT,
-    title VARCHAR(80) NOT NULL,
-    description VARCHAR(255),
+CREATE TABLE sections
+(
+    id                UUID        NOT NULL DEFAULT gen_random_uuid(),
+    parent_section_id UUID,
+    title             VARCHAR(80) NOT NULL,
+    description       TEXT        NOT NULL,
+    locked            BOOLEAN     NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id),
-    FOREIGN KEY (parent_section_id) REFERENCES section(id)
+    FOREIGN KEY (parent_section_id) REFERENCES sections (id) ON DELETE CASCADE
 );
 
-CREATE TABLE topic (
-    id SMALLSERIAL NOT NULL,
-    character_id SERIAL,
-    section_id SMALLINT NOT NULL,
-    character_village_id SMALLINT,
-    character_rank_id SMALLINT,
-    character_age SMALLINT,
-    title VARCHAR(80) NOT NULL,
-    character_name VARCHAR(70),
-    content TEXT NOT NULL,
-    character_avatar TEXT,
+CREATE TABLE topics
+(
+    id         UUID                     NOT NULL DEFAULT gen_random_uuid(),
+    created_by UUID                     NOT NULL,
+    section_id UUID                     NOT NULL,
+    locked     BOOLEAN                  NOT NULL DEFAULT FALSE,
+    title      VARCHAR(80)              NOT NULL,
+    content    TEXT                     NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
+    updated_at TIMESTAMP WITH TIME ZONE          DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    FOREIGN KEY (section_id) REFERENCES section(id)
+    FOREIGN KEY (section_id) REFERENCES sections (id) ON DELETE CASCADE
 );
 
-CREATE TABLE post (
-    id SMALLSERIAL NOT NULL,
-    character_id SERIAL,
-    topic_id SMALLINT NOT NULL,
-    character_village_id SMALLINT,
-    character_rank_id SMALLINT,
-    character_age SMALLINT,
-    character_name VARCHAR(70),
-    content TEXT NOT NULL,
-    character_avatar TEXT,
+CREATE TABLE posts
+(
+    id         UUID                     NOT NULL DEFAULT gen_random_uuid(),
+    topic_id   UUID                     NOT NULL,
+    created_by UUID                     NOT NULL,
+    content    TEXT                     NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     PRIMARY KEY (id),
-    FOREIGN KEY (topic_id) REFERENCES topic(id)
+    FOREIGN KEY (topic_id) REFERENCES topics (id) ON DELETE CASCADE
 );
 
-CREATE INDEX topic_content_idx ON topic USING GIN (to_tsvector('portuguese', content));
+-- Full-text search indexes
+CREATE INDEX topics_content_idx ON topics USING GIN (to_tsvector('portuguese', content));
+CREATE INDEX posts_content_idx ON posts USING GIN (to_tsvector('portuguese', content));
