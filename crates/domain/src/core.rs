@@ -7,19 +7,22 @@ use chrono::{DateTime, Utc};
 pub struct Section {
     pub id: Uuid,
     pub parent_section_id: Option<Uuid>,
+    pub updated_by: Option<Uuid>,
     pub title: String,
     pub description: String,
     pub locked: bool,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: Option<DateTime<Utc>>,
 }
 
 #[derive(sqlx::FromRow, Serialize, Deserialize)]
 pub struct Topic {
     pub id: Uuid,
     pub created_by: Uuid,
+    pub updated_by: Option<Uuid>,
     pub section_id: Uuid,
     pub locked: bool,
     pub title: String,
-    pub content: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: Option<DateTime<Utc>>,
 }
@@ -29,8 +32,10 @@ pub struct Post {
     pub id: Uuid,
     pub topic_id: Uuid,
     pub created_by: Uuid,
+    pub updated_by: Option<Uuid>,
     pub content: String,
     pub created_at: DateTime<Utc>,
+    pub updated_at: Option<DateTime<Utc>>,
 }
 
 #[derive(sqlx::FromRow, Serialize)]
@@ -43,7 +48,6 @@ pub struct SectionData {
 #[derive(sqlx::FromRow, Serialize, Deserialize)]
 pub struct SectionPreview {
     pub section: Section,
-    pub most_recent_topic: Option<Topic>,
     pub most_recent_post: Option<Post>,
 }
 
@@ -65,7 +69,7 @@ impl Section {
             "#,
             title,
             description,
-            parent_section_id
+            parent_section_id,
         )
             .fetch_one(&pool)
             .await?;
@@ -76,15 +80,15 @@ impl Section {
     pub async fn get_section_data(pool: PgPool, section_id: Uuid) -> DBResult<SectionData> {
         let query = r#"
         WITH RECURSIVE section_tree AS (
-            SELECT id, parent_section_id, title, description, locked
+            SELECT id, parent_section_id, created_by, title, description, locked
             FROM sections
             WHERE id = $1
             UNION ALL
-            SELECT sections.id, sections.parent_section_id, sections.title, sections.description, sections.locked
+            SELECT sections.id, sections.parent_section_id, sections.updated_by, sections.title, sections.description, sections.locked
             FROM sections
             INNER JOIN section_tree ON section_tree.id = sections.parent_section_id
         )
-        SELECT section_tree.id, section_tree.parent_section_id, section_tree.title, section_tree.description, section_tree.locked, topics.id, topics.created_by, topics.section_id, topics.locked, topics.title, topics.content, topics.created_at, topics.updated_at
+        SELECT section_tree.id, section_tree.parent_section_id, section_tree.updated_by, section_tree.title, section_tree.description, section_tree.locked, topics.id, topics.created_by, topics.section_id, topics.locked, topics.title, topics.content, topics.created_at, topics.updated_at
         FROM section_tree
         LEFT JOIN topics ON section_tree.id = topics.section_id;
     "#;
@@ -102,9 +106,12 @@ impl Section {
         let section = Section {
             id: rows[0].get("id"),
             parent_section_id: rows[0].get("parent_section_id"),
+            updated_by: rows[0].get("updated_by"),
             title: rows[0].get("title"),
             description: rows[0].get("description"),
             locked: rows[0].get("locked"),
+            created_at: rows[0].get("created_at"),
+            updated_at: rows[0].get("updated_at"),
         };
 
         let topics = rows.iter().filter_map(|row| {
@@ -113,9 +120,9 @@ impl Section {
                 id,
                 created_by: row.get("topics.created_by"),
                 section_id: row.get("topics.section_id"),
+                updated_by: row.get("topics.updated_by"),
                 locked: row.get("topics.locked"),
                 title: row.get("topics.title"),
-                content: row.get("topics.content"),
                 created_at: row.get("topics.created_at"),
                 updated_at: row.get("topics.updated_at"),
             })
@@ -126,9 +133,12 @@ impl Section {
             section_id.map(|id| Section {
                 id,
                 parent_section_id: row.get("parent_section_id"),
+                updated_by: row.get("updated_by"),
                 title: row.get("title"),
                 description: row.get("description"),
                 locked: row.get("locked"),
+                created_at: row.get("created_at"),
+                updated_at: row.get("updated_at"),
             })
         }).collect();
 
@@ -138,25 +148,25 @@ impl Section {
     pub async fn get_root_sections(pool: PgPool) -> DBResult<Vec<SectionPreview>> {
         let query = r#"
         WITH
-        RecentTopics AS (
+        TopicsOnSection AS (
             SELECT DISTINCT ON (section_id)
-                id, created_by, section_id, locked, title, content, created_at, updated_at
+                id, section_id
             FROM topics
-            ORDER BY section_id, updated_at DESC
+            ORDER BY section_id DESC
         ),
         RecentPosts AS (
             SELECT DISTINCT ON (topic_id)
-                id, topic_id, created_by, content, created_at
+                id, topic_id, created_by, updated_by, content, created_at, updated_at
             FROM posts
             ORDER BY topic_id, created_at DESC
         )
         SELECT
-            s.id as section_id, s.title as section_title, s.description as section_description, s.locked as section_locked,
-            rt.id as topic_id, rt.created_by as topic_created_by, rt.locked as topic_locked, rt.title as topic_title, rt.content as topic_content, rt.created_at as topic_created_at, rt.updated_at as topic_updated_at,
-            rp.id as post_id, rp.created_by as post_created_by, rp.content as post_content, rp.created_at as post_created_at
+            s.id as section_id, s.title as section_title, s.updated_by as section_updated_by, s.description as section_description, s.locked as section_locked, s.created_at as section_created_at, s.updated_at as section_updated_at,
+            tp.id as topic_id, tp.section_id as topic_section_id,
+            rp.id as post_id, rp.topic_id as post_topic_id, rp.created_by as post_created_by, rp.updated_by as post_updated_by, rp.content as post_content, rp.created_at as post_created_at, rp.updated_at as post_updated_at
         FROM sections s
-        LEFT JOIN RecentTopics rt ON s.id = rt.section_id
-        LEFT JOIN RecentPosts rp ON rt.id = rp.topic_id
+        LEFT JOIN TopicsOnSection tp ON s.id = tp.section_id
+        LEFT JOIN RecentPosts rp ON tp.id = rp.topic_id
         WHERE s.parent_section_id IS NULL;
     "#;
 
@@ -167,32 +177,23 @@ impl Section {
         let section_previews = rows.into_iter().map(|row| SectionPreview {
             section: Section {
                 id: row.get("section_id"),
-                parent_section_id: None,  // Since we're only fetching root sections
+                parent_section_id: None,
+                updated_by: row.get("section_updated_by"),
                 title: row.get("section_title"),
                 description: row.get("section_description"),
                 locked: row.get("section_locked"),
-            },
-            most_recent_topic: if row.get::<Option<Uuid>, _>("topic_id").is_some() {
-                Some(Topic {
-                    id: row.get("topic_id"),
-                    created_by: row.get("topic_created_by"),
-                    section_id: row.get("section_id"),
-                    locked: row.get("topic_locked"),
-                    title: row.get("topic_title"),
-                    content: row.get("topic_content"),
-                    created_at: row.get("topic_created_at"),
-                    updated_at: row.get("topic_updated_at"),
-                })
-            } else {
-                None
+                created_at: row.get("section_created_at"),
+                updated_at: row.get("section_updated_at"),
             },
             most_recent_post: if row.get::<Option<Uuid>, _>("post_id").is_some() {
                 Some(Post {
                     id: row.get("post_id"),
                     topic_id: row.get("topic_id"),
                     created_by: row.get("post_created_by"),
+                    updated_by: row.get("post_updated_by"),
                     content: row.get("post_content"),
                     created_at: row.get("post_created_at"),
+                    updated_at: row.get("post_updated_at"),
                 })
             } else {
                 None
@@ -206,15 +207,21 @@ impl Section {
 impl Topic {
     pub async fn create_topic(pool: PgPool, title: &str, section_id: Uuid, content: &str, created_by: Uuid) -> DBResult<Uuid> {
         let query = r#"
-            WITH SectionStatus AS (
+           WITH SectionStatus AS (
                 SELECT locked
                 FROM sections
                 WHERE id = $1
+            ),
+            InsertTopic AS (
+                INSERT INTO topics (created_by, section_id, title)
+                SELECT $2, $1, $3
+                FROM SectionStatus
+                WHERE NOT locked
+                RETURNING id
             )
-            INSERT INTO topics (created_by, section_id, title, content)
-            SELECT $2, $1, $3, $4
-            FROM SectionStatus
-            WHERE NOT locked
+            INSERT INTO posts (topic_id, created_by, content)
+            SELECT InsertTopic.id, $2, $4
+            FROM InsertTopic
             RETURNING id;
         "#;
 
@@ -235,11 +242,8 @@ impl Topic {
     pub async fn get_topic_data(pool: PgPool, topic_id: Uuid) -> DBResult<TopicData> {
         let query = r#"
             SELECT
-                topics.id as topic_id, topics.created_by as topic_created_by, topics.section_id as topic_section_id,
-                topics.locked as topic_locked, topics.title as topic_title, topics.content as topic_content,
-                topics.created_at as topic_created_at, topics.updated_at as topic_updated_at,
-                posts.id as post_id, posts.topic_id as post_topic_id, posts.created_by as post_created_by,
-                posts.content as post_content, posts.created_at as post_created_at
+                topics.id as topic_id, topics.created_by as topic_created_by, topics.updated_by as topic_updated_by, topics.section_id as topic_section_id, topics.locked as topic_locked, topics.title as topic_title, topics.created_at as topic_created_at, topics.updated_at as topic_updated_at,
+                posts.id as post_id, posts.topic_id as post_topic_id, posts.created_by as post_created_by, posts.updated_by as post_updated_by, posts.content as post_content, posts.created_at as post_created_at, posts.updated_at as post_updated_at
             FROM
                 topics
             LEFT JOIN
@@ -263,10 +267,10 @@ impl Topic {
         let topic = Topic {
             id: rows[0].get("topic_id"),
             created_by: rows[0].get("topic_created_by"),
+            updated_by: rows[0].get("topic_updated_by"),
             section_id: rows[0].get("topic_section_id"),
             locked: rows[0].get("topic_locked"),
             title: rows[0].get("topic_title"),
-            content: rows[0].get("topic_content"),
             created_at: rows[0].get("topic_created_at"),
             updated_at: rows[0].get("topic_updated_at"),
         };
@@ -277,8 +281,10 @@ impl Topic {
                     id: post_id,
                     topic_id: row.get("post_topic_id"),
                     created_by: row.get("post_created_by"),
+                    updated_by: row.get("post_updated_by"),
                     content: row.get("post_content"),
                     created_at: row.get("post_created_at"),
+                    updated_at: row.get("post_updated_at"),
                 });
             }
         }
@@ -295,16 +301,17 @@ impl Post {
                 FROM topics
                 WHERE id = $1
             ),
-            InsertPost (
+            InsertPost AS (
                 INSERT INTO posts (topic_id, created_by, content)
                 SELECT $1, $2, $3
                 FROM TopicStatus
                 WHERE NOT locked
-                RETURNING id;
+                RETURNING id
             )
             UPDATE topics
             SET updated_at = now()
             WHERE id = $1
+            RETURNING id;
         "#;
 
         let row = sqlx::query(query)
@@ -317,6 +324,42 @@ impl Post {
         match row {
             Some(row) => Ok(row.get("id")),
             None => Err("The topic is locked or does not exist.".into()),
+        }
+    }
+
+    pub async fn edit_post(pool: PgPool, post_id: Uuid, column: &str, value: &str, edited_by: Uuid) -> DBResult<Uuid> {
+        let query_string = format!(r#"UPDATE posts SET {} = $3, updated_by = $4, updated_at = now() WHERE id = $1 RETURNING id"#, column);
+
+        let query = sqlx::query(&query_string);
+
+        let row = query
+            .bind(post_id)
+            .bind(column)
+            .bind(value)
+            .bind(edited_by)
+            .fetch_optional(&pool)
+            .await?;
+        match row {
+            Some(row) => Ok(row.get("id")),
+            None => Err("The post does not exist.".into()),
+        }
+    }
+
+    pub async fn delete_post(pool: PgPool , post_id: Uuid) -> DBResult<Uuid> {
+        let query = r#"
+                DELETE FROM posts
+                WHERE id = $1
+                RETURNING id
+        "#;
+
+        let row = sqlx::query(query)
+            .bind(post_id)
+            .fetch_optional(&pool)
+            .await?;
+
+        match row {
+            Some(row) => Ok(row.get("id")),
+            None => Err("The post does not exist.".into()),
         }
     }
 }
