@@ -1,7 +1,5 @@
 use axum;
-use axum::{
-    Router,
-};
+use axum::{middleware, Router};
 use anyhow::{
     Context,
     Result
@@ -10,6 +8,7 @@ use anyhow::{
 use std::{
     net::SocketAddr,
 };
+use crate::auth_middleware;
 
 use crate::endpoints::{
     banking::BankingRouter,
@@ -23,7 +22,8 @@ impl Controller {
         let router = Router::new()
             .nest("/banking", BankingRouter::new_router(pool.clone()).clone())
             .nest("/core", CoreRouter::new_router(pool.clone()).clone())
-            .route("/", axum::routing::get(|| async { "Hello, world!" }));
+            .route("/", axum::routing::get(|| async { "Hello, world!" }))
+            .route_layer(middleware::from_fn(auth_middleware::auth));
 
         let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
         println!("Listening on {}", addr);

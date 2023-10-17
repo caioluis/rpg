@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/src/banking/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/bin/Cargo.toml" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ddc13a35-cfd5-4b70-91d8-9a7395a0baea" name="Changes" comment="feat(hanko): tweak auth component styles">
+      <change afterPath="$PROJECT_DIR$/crates/api/src/auth_middleware.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/rpg.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/api/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/crates/api/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/api/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/api/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/api/src/router.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/api/src/router.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/bin/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/crates/bin/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/domain/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/crates/domain/Cargo.toml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="Rust File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="mbgcco5a" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2WRsGPN7lN1blzZ6l6Tg52e0tqs" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "HTTP Request.rest-api_1 | #1.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/caiogomes/RustroverProjects/rpg",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.build.executor": "Run",
+    "npm.dev.executor": "Run",
+    "npm.start.executor": "Run",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/Users/caiogomes/RustroverProjects/rpg/frontend/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ],
+    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
+      "PostgreSQL"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/app" />
+      <recent name="$PROJECT_DIR$/frontend/public" />
+      <recent name="$PROJECT_DIR$/crates/domain/src" />
+      <recent name="$PROJECT_DIR$/crates/domain/src/banking" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="HTTP Request.rest-api_1 | #1">
+    <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="run --package rpg --bin rpg" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="rest-api_1 | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/rest-api_1.http" requestIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="sum test" type="JavaScriptTestRunnerVitest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <vitest-package value="$PROJECT_DIR$/frontend/node_modules/vitest" />
+      <working-dir value="$PROJECT_DIR$/frontend" />
+      <vitest-options value="--run" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/frontend/src/index.test.ts" />
+      <test-names>
+        <test-name value="sum test" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.rest-api_1 | #1" />
+        <item itemvalue="npm.dev" />
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.build" />
+        <item itemvalue="Vitest.sum test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ddc13a35-cfd5-4b70-91d8-9a7395a0baea" name="Changes" comment="" />
+      <created>1696706630766</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696706630766</updated>
+      <workItem from="1696706631891" duration="22771000" />
+      <workItem from="1696740729296" duration="166000" />
+      <workItem from="1696740901371" duration="25944000" />
+      <workItem from="1696851308733" duration="14745000" />
+      <workItem from="1696884805905" duration="46380000" />
+      <workItem from="1696990967140" duration="67000" />
+      <workItem from="1696991041624" duration="14747000" />
+      <workItem from="1697024720089" duration="1779000" />
+      <workItem from="1697029887502" duration="6105000" />
+      <workItem from="1697046795612" duration="805000" />
+      <workItem from="1697070283289" duration="17683000" />
+      <workItem from="1697148168415" duration="59000" />
+      <workItem from="1697148235590" duration="589000" />
+      <workItem from="1697148860515" duration="686000" />
+      <workItem from="1697156040640" duration="2061000" />
+      <workItem from="1697191664375" duration="2176000" />
+      <workItem from="1697195056251" duration="71000" />
+      <workItem from="1697195134074" duration="3651000" />
+      <workItem from="1697200657628" duration="901000" />
+      <workItem from="1697379316710" duration="6136000" />
+      <workItem from="1697477710562" duration="17153000" />
+      <workItem from="1697558641307" duration="3007000" />
+    </task>
+    <task id="LOCAL-00001" summary="feat(banking): small changes to remove multi-schema approach">
+      <option name="closed" value="true" />
+      <created>1697023897765</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1697023897766</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat(core): change core schema radically, implement endpoints">
+      <option name="closed" value="true" />
+      <created>1697023979339</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1697023979339</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat(core): organise routes, fix sections root query">
+      <option name="closed" value="true" />
+      <created>1697034792141</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1697034792141</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat(core): organise endpoints, tweak queries and schema">
+      <option name="closed" value="true" />
+      <created>1697131087190</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1697131087190</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat(hanko): tweak auth component styles">
+      <option name="closed" value="true" />
+      <created>1697408656651</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1697408656651</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/frontend/tailwind.config.js" />
+      </list>
+    </option>
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.svelte" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat(banking): small changes to remove multi-schema approach" />
+    <MESSAGE value="feat(core): change core schema radically, implement endpoints" />
+    <MESSAGE value="feat(core): organise routes, fix sections root query" />
+    <MESSAGE value="feat(core): organise endpoints, tweak queries and schema" />
+    <MESSAGE value="feat(hanko): tweak auth component styles" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(hanko): tweak auth component styles" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

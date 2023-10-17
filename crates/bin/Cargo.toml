@@ -7,7 +7,7 @@ edition = "2021"
 domain = { path = "../domain" }
 api = { path = "../api" }
 
-axum = { version = "0.6.20", features = ["macros"] }
+axum = { version = "0.6.20", features = ["macros", "headers"] }
 tokio = { version = "1.25.0", features = ["full", "rt-multi-thread", "macros"] }
 sqlx = { version = "0.7.1", features = [ "runtime-tokio-rustls", "bigdecimal", "chrono", "postgres", "macros"] }
 tracing = "0.1.37"
@@ -17,3 +17,5 @@ tower-http = { version = "0.4.4", features = ["fs"] }
 chrono = { version = "0.4.31", features = ["serde"] }
 serde = { version = "1.0.188", features = ["derive"] }
 anyhow = "1.0.75"
+jsonwebtoken = "9.0.0"
+reqwest = { version = "0.11.22", features = ["json"] }
