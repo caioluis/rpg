@@ -1,0 +1,8 @@
+.active {
+    @apply inline-flex items-center border-b-2 !border-orange-500 px-1 pt-1 text-sm font-medium text-neutral-200 hover:text-neutral-200 hover:border-orange-500
+}
+
+.nav-link {
+    @apply inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-neutral-200 hover:border-gray-300 hover:text-neutral-100
+}
+

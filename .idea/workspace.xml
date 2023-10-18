@@ -10,18 +10,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ddc13a35-cfd5-4b70-91d8-9a7395a0baea" name="Changes" comment="feat(hanko): tweak auth component styles">
-      <change afterPath="$PROJECT_DIR$/crates/api/src/auth_middleware.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/rpg.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/api/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/crates/api/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/api/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/api/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/api/src/router.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/api/src/router.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/bin/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/crates/bin/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/domain/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/crates/domain/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/components/Button.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/components/navigation/Navbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/components/navigation/navbar.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/components/pageSections/Mural.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/components/pageSections/RegrasETutoriais.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/components/pageSections/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/next.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tailwind.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,38 +58,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "HTTP Request.rest-api_1 | #1.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/caiogomes/RustroverProjects/rpg",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.build.executor": "Run",
-    "npm.dev.executor": "Run",
-    "npm.start.executor": "Run",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/Users/caiogomes/RustroverProjects/rpg/frontend/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/caiogomes/RustroverProjects/rpg&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.build.executor&quot;: &quot;Run&quot;,
+    &quot;npm.dev.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start.executor&quot;: &quot;Run&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/caiogomes/RustroverProjects/rpg/frontend/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ],
-    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
-      "PostgreSQL"
+    &quot;com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect&quot;: [
+      &quot;PostgreSQL&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/frontend/app" />
@@ -203,7 +204,10 @@
       <workItem from="1697200657628" duration="901000" />
       <workItem from="1697379316710" duration="6136000" />
       <workItem from="1697477710562" duration="17153000" />
-      <workItem from="1697558641307" duration="3007000" />
+      <workItem from="1697558641307" duration="464000" />
+      <workItem from="1697575877639" duration="1494000" />
+      <workItem from="1697632826252" duration="598000" />
+      <workItem from="1697635082075" duration="1015000" />
     </task>
     <task id="LOCAL-00001" summary="feat(banking): small changes to remove multi-schema approach">
       <option name="closed" value="true" />

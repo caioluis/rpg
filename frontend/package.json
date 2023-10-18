@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "infisical run -- next dev",
-    "build": "infisical run -- next build",
-    "start": "infisical run -- next start",
-    "lint": "infisical run -- next lint"
+    "dev": "infisical run -- next dev -p 3001",
+    "build": "infisical run -- next build -p 3001",
+    "start": "infisical run -- next start -p 3001",
+    "lint": "infisical run -- next lint -p 3001"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
+    "@radix-ui/react-navigation-menu": "^1.1.4",
+    "@radix-ui/react-slot": "^1.0.2",
     "@teamhanko/hanko-elements": "^0.8.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
