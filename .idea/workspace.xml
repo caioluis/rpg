@@ -9,21 +9,18 @@
     <cargoProject FILE="$PROJECT_DIR$/bin/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ddc13a35-cfd5-4b70-91d8-9a7395a0baea" name="Changes" comment="feat(hanko): tweak auth component styles">
-      <change afterPath="$PROJECT_DIR$/frontend/components/Button.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/components/navigation/Navbar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/components/navigation/navbar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/components/pageSections/Mural.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/components/pageSections/RegrasETutoriais.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/components/pageSections/index.tsx" afterDir="false" />
+    <list default="true" id="ddc13a35-cfd5-4b70-91d8-9a7395a0baea" name="Changes" comment="feat(hanko): add components and tweak ui">
+      <change afterPath="$PROJECT_DIR$/frontend/app/home/layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/home/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/components/navigation/Logout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/globals.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/login/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/next.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tailwind.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/HankoAuth.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/HankoAuth.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/navigation/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/navigation/Navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/pageSections/Mural.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/pageSections/Mural.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/pageSections/RegrasETutoriais.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/pageSections/RegrasETutoriais.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,10 +89,10 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/frontend/app" />
+      <recent name="$PROJECT_DIR$/frontend/app/(login)/login" />
       <recent name="$PROJECT_DIR$/frontend/public" />
       <recent name="$PROJECT_DIR$/crates/domain/src" />
       <recent name="$PROJECT_DIR$/crates/domain/src/banking" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager" selected="HTTP Request.rest-api_1 | #1">
@@ -208,6 +205,7 @@
       <workItem from="1697575877639" duration="1494000" />
       <workItem from="1697632826252" duration="598000" />
       <workItem from="1697635082075" duration="1015000" />
+      <workItem from="1697720993651" duration="934000" />
     </task>
     <task id="LOCAL-00001" summary="feat(banking): small changes to remove multi-schema approach">
       <option name="closed" value="true" />
@@ -249,7 +247,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697408656651</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat(hanko): add components and tweak ui">
+      <option name="closed" value="true" />
+      <created>1697650626096</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1697650626096</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,7 +275,8 @@
     <MESSAGE value="feat(core): organise routes, fix sections root query" />
     <MESSAGE value="feat(core): organise endpoints, tweak queries and schema" />
     <MESSAGE value="feat(hanko): tweak auth component styles" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(hanko): tweak auth component styles" />
+    <MESSAGE value="feat(hanko): add components and tweak ui" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(hanko): add components and tweak ui" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -7,6 +7,7 @@ import {cn} from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import "./navbar.css"
+import {LogoutBtn} from "@/components/navigation/Logout";
 
 // TODO: remove the hard coded values and replace them with the actual matches
 
@@ -49,7 +50,7 @@ export default function Navbar() {
                                     <Link href="#" className="nav-link">Databook</Link>
                                 </div>
                             </div>
-                            {/* Reinstall when search is implemented */}
+                            {/* TODO: Reinstall when search is implemented */}
                             {/*<div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">*/}
                             {/*    <div className="w-full max-w-lg lg:max-w-xs">*/}
                             {/*        <label htmlFor="search" className="sr-only">*/}
@@ -118,7 +119,7 @@ export default function Navbar() {
                                                 {({ active }) => (
                                                     <a
                                                         href="#"
-                                                        className={cn(active ? 'bg-neutral-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        className={cn(active ? 'bg-neutral-800' : '', 'block px-4 py-2 text-sm text-neutral-200')}
                                                     >
                                                         Your Profile
                                                     </a>
@@ -128,7 +129,7 @@ export default function Navbar() {
                                                 {({ active }) => (
                                                     <a
                                                         href="#"
-                                                        className={cn(active ? 'bg-neutral-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        className={cn(active ? 'bg-neutral-800' : '', 'block px-4 py-2 text-sm text-neutral-200')}
                                                     >
                                                         Settings
                                                     </a>
@@ -136,12 +137,7 @@ export default function Navbar() {
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <a
-                                                        href="#"
-                                                        className={cn(active ? 'bg-neutral-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                    >
-                                                        Sign out
-                                                    </a>
+                                                   <LogoutBtn />
                                                 )}
                                             </Menu.Item>
                                         </Menu.Items>
@@ -207,9 +203,7 @@ export default function Navbar() {
                                     Settings
                                 </Disclosure.Button>
                                 <Disclosure.Button
-                                    as="a"
-                                    href="#"
-                                    className="block px-4 py-2 text-base font-medium text-neutral-200 hover:bg-neutral-100 hover:text-gray-800"
+                                    as={LogoutBtn}
                                 >
                                     Sign out
                                 </Disclosure.Button>

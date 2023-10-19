@@ -5,7 +5,7 @@ import Link from "next/link";
 export const RegrasETutoriais = () => {
     return (
         <div className="flex justify-between">
-            <div className="relative mt-10 h-[180px] xs:h-[260px] s:h-[300px] sm:h-[330px] md:h-[370px] mmd:h-[400px] p-2 xs:p-6 rounded-md z-[1] lg:h-[420px] w-8/12 bg-neutral-950 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-70 border border-neutral-800">
+            <div className="relative mt-10 h-[180px] xs:h-[260px] s:h-[300px] sm:h-[330px] md:h-[370px] mmd:h-[400px] p-4 xs:p-6 rounded-md z-[1] lg:h-[420px] w-8/12 bg-neutral-950 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-70 border border-neutral-800">
                 <div className="absolute h-[190px] w-[220px] xs:h-[260px] xs:w-[290px] s:h-[320px] s:w-[350px] sm:h-[350px] sm:w-[380px] md:h-[390px] md:w-[420px] mmd:h-[420px] mmd:w-[450px] lg:h-[440px] lg:w-[470px] z-[3] left-[110px] xs:left-[90px] s:left-[140px] sm:left-[170px] md:left-[240px] bottom-0">
                     <Image src="https://i.imgur.com/LRhF1aI.png" fill={true} alt="Hashirama" />
                 </div>

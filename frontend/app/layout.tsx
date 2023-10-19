@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: 'O RPG de Naruto mais completo da internet.',
 }
 
+
 export default function RootLayout({
                                        children,
                                    }: {
@@ -20,26 +21,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-        <body className={cn(inter.className, "dark")}>
-        <>
-            <Navbar/>
-            <div className="fixed z-[-1] h-screen w-screen">
-                <Image
-                    src="https://i.imgur.com/hkj0kMn.jpg"
-                    fill={true}
-                    className="aspect-w-16 aspect-h-9 object-cover"
-                    alt="Background"
-                    style={{
-                        WebkitMaskImage:
-                            "-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), to(rgba(0,0,0,0.2)))"
-                    }}
-                />
-            </div>
-            <main className="mt-24">
-                {children}
-            </main>
-        </>
-        </body>
+            <body className={cn(inter.className, "dark")}>{children}</body>
         </html>
     )
 }
