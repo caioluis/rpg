@@ -1,6 +1,6 @@
 debug/
 target/
-
+db/auth.sql
 **/*.rs.bk
 
 *.pdb
