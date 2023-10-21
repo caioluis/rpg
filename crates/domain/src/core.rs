@@ -76,19 +76,19 @@ impl Section {
 
         Ok(recap.id)
     }
-
+// TODO: update it to handle better the last post and user info
     pub async fn get_section_data(pool: PgPool, section_id: Uuid) -> DBResult<SectionData> {
         let query = r#"
         WITH RECURSIVE section_tree AS (
-            SELECT id, parent_section_id, created_by, title, description, locked
+            SELECT id, parent_section_id, updated_by, title, description, locked, created_at, updated_at
             FROM sections
             WHERE id = $1
             UNION ALL
-            SELECT sections.id, sections.parent_section_id, sections.updated_by, sections.title, sections.description, sections.locked
+            SELECT sections.id, sections.parent_section_id, sections.updated_by, sections.title, sections.description, sections.locked,  sections.created_at, sections.updated_at
             FROM sections
             INNER JOIN section_tree ON section_tree.id = sections.parent_section_id
         )
-        SELECT section_tree.id, section_tree.parent_section_id, section_tree.updated_by, section_tree.title, section_tree.description, section_tree.locked, topics.id, topics.created_by, topics.section_id, topics.locked, topics.title, topics.content, topics.created_at, topics.updated_at
+        SELECT section_tree.id, section_tree.parent_section_id, section_tree.updated_by, section_tree.title, section_tree.description, section_tree.locked, section_tree.created_at, section_tree.updated_at, topics.id as topic_id, topics.created_by as topic_created_by, topics.updated_by as topic_updated_by, topics.section_id, topics.locked as topic_locked, topics.title as topic_title, topics.created_at as topic_created_at, topics.updated_at  as topic_updated_at
         FROM section_tree
         LEFT JOIN topics ON section_tree.id = topics.section_id;
     "#;
@@ -115,31 +115,34 @@ impl Section {
         };
 
         let topics = rows.iter().filter_map(|row| {
-            let topic_id: Option<Uuid> = row.get("topics.id");
+            let topic_id: Option<Uuid> = row.get("topic_id");
             topic_id.map(|id| Topic {
                 id,
-                created_by: row.get("topics.created_by"),
-                section_id: row.get("topics.section_id"),
-                updated_by: row.get("topics.updated_by"),
-                locked: row.get("topics.locked"),
-                title: row.get("topics.title"),
-                created_at: row.get("topics.created_at"),
-                updated_at: row.get("topics.updated_at"),
+                created_by: row.get("topic_created_by"),
+                section_id: row.get("id"),
+                updated_by: row.get("topic_updated_by"),
+                locked: row.get("topic_locked"),
+                title: row.get("topic_title"),
+                created_at: row.get("topic_created_at"),
+                updated_at: row.get("topic_updated_at"),
             })
         }).collect();
 
-        let children_sections = rows.iter().filter_map(|row| {
-            let section_id: Option<Uuid> = row.get("id");
-            section_id.map(|id| Section {
-                id,
-                parent_section_id: row.get("parent_section_id"),
-                updated_by: row.get("updated_by"),
-                title: row.get("title"),
-                description: row.get("description"),
-                locked: row.get("locked"),
-                created_at: row.get("created_at"),
-                updated_at: row.get("updated_at"),
-            })
+        let children_sections = rows.iter().filter_map(|row | {
+            if row.get::<Option<Uuid>, _>("parent_section_id") == Some(section_id) {
+                Some(Section {
+                    id: row.get("id"),
+                    parent_section_id: row.get("parent_section_id"),
+                    updated_by: row.get("updated_by"),
+                    title: row.get("title"),
+                    description: row.get("description"),
+                    locked: row.get("locked"),
+                    created_at: row.get("created_at"),
+                    updated_at: row.get("updated_at"),
+                })
+            } else {
+                None
+            }
         }).collect();
 
         Ok(SectionData { section, topics, children_sections })

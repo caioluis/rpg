@@ -1,7 +1,7 @@
 use sqlx::postgres::PgPool;
 use axum::{extract::{self, State, Path}, Json, Router, routing::{get, post, delete, patch}};
 
-use domain::core::{Topic, Post, Section, SectionPreview, TopicData};
+use domain::core::{Topic, Post, Section, SectionPreview, TopicData, SectionData};
 use uuid::Uuid;
 
 pub struct CoreRouter;
@@ -11,6 +11,9 @@ impl CoreRouter {
         Router::new()
             .route("/sections", get(get_root_sections))
             .route("/sections", post(create_section))
+            // TODO: route naming convention is somewhat inconsistent, it would be great to further study the axum's nesting of routes
+            //      as I'm doing this as a workaround avoid route conflicts.
+            .route("/section/:section_id", get(get_section))
             .route("/sections/:section_id/topic", post(create_topic))
             .route("/sections/:parent_section_id", post(create_child_section))
             .route("/topic/:topic_id", get(get_topic_data))
@@ -34,6 +37,10 @@ pub async fn get_root_sections(State(pool): State<PgPool>) -> Json<Vec<SectionPr
     Json(sections)
 }
 
+pub async fn get_section(State(pool): State<PgPool>, Path(section_id): Path<Uuid>) -> Json<SectionData> {
+    let section = Section::get_section_data(pool, section_id).await.unwrap();
+    Json(section)
+}
 
 pub async fn create_section(State(pool): State<PgPool>, extract::Json(payload): extract::Json<CreateSectionRequest>) -> Json<Uuid> {
     let section_id = Section::create_section(pool, payload.title.as_ref(), payload.description.as_ref(), None).await.unwrap();
