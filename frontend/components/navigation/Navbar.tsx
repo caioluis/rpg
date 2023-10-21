@@ -21,7 +21,7 @@ export default function Navbar() {
                             <div className="flex px-2 lg:px-0">
                                 <div className="flex gap-2">
                                     <Image
-                                        src="./DattebayoLogo.svg"
+                                        src="/DattebayoLogo.svg"
                                         sizes="100vw"
                                         style={{
                                             width: 25,
@@ -33,7 +33,7 @@ export default function Navbar() {
                                         draggable={false}
                                     />
                                     <Image
-                                        src="./DattebayoNameLogo.svg"
+                                        src="/DattebayoNameLogo.svg"
                                         sizes="100vw"
                                         style={{
                                             width: 160,
@@ -47,7 +47,7 @@ export default function Navbar() {
                                 </div>
                                 <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
                                     <Link href="/" className="nav-link active">Início</Link>
-                                    <Link href="#" className="nav-link">Databook</Link>
+                                    <Link href="/section/offtopic" className="nav-link">Off-topic</Link>
                                 </div>
                             </div>
                             {/* TODO: Reinstall when search is implemented */}
@@ -149,7 +149,6 @@ export default function Navbar() {
 
                     <Disclosure.Panel className="lg:hidden">
                         <div className="space-y-1 pb-3 pt-2">
-                            {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
                             <Disclosure.Button
                                 as="a"
                                 href="#"
