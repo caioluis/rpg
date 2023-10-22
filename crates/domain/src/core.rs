@@ -41,7 +41,7 @@ pub struct Post {
 #[derive(sqlx::FromRow, Serialize)]
 pub struct SectionData {
     pub section: Section,
-    pub topics: Vec<Topic>,
+    pub topics: Vec<TopicPreview>,
     pub children_sections: Vec<Section>,
 }
 
@@ -49,6 +49,20 @@ pub struct SectionData {
 pub struct SectionPreview {
     pub section: Section,
     pub most_recent_post: Option<Post>,
+}
+
+#[derive(sqlx::FromRow, Serialize, Deserialize)]
+pub struct TopicPreview {
+    pub topic: Topic,
+    pub most_recent_post: PostPreview,
+}
+
+#[derive(sqlx::FromRow, Serialize, Deserialize)]
+pub struct PostPreview {
+    pub id: Uuid,
+    pub created_by: Uuid,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: Option<DateTime<Utc>>,
 }
 
 #[derive(sqlx::FromRow, Serialize)]
@@ -80,17 +94,62 @@ impl Section {
     pub async fn get_section_data(pool: PgPool, section_id: Uuid) -> DBResult<SectionData> {
         let query = r#"
         WITH RECURSIVE section_tree AS (
-            SELECT id, parent_section_id, updated_by, title, description, locked, created_at, updated_at
+            SELECT id,
+                   parent_section_id,
+                   updated_by,
+                   title,
+                   description,
+                   locked,
+                   created_at,
+                   updated_at
             FROM sections
             WHERE id = $1
             UNION ALL
-            SELECT sections.id, sections.parent_section_id, sections.updated_by, sections.title, sections.description, sections.locked,  sections.created_at, sections.updated_at
+            SELECT sections.id,
+                   sections.parent_section_id,
+                   sections.updated_by,
+                   sections.title,
+                   sections.description,
+                   sections.locked,
+                   sections.created_at,
+                   sections.updated_at
             FROM sections
             INNER JOIN section_tree ON section_tree.id = sections.parent_section_id
+        ), TopicsOnSection AS (
+            SELECT id, section_id, created_by, updated_by, title, locked, created_at, updated_at
+            FROM topics
+            WHERE section_id IN (SELECT id FROM section_tree)
+        ),
+               RecentPosts AS (
+            SELECT DISTINCT ON (topic_id)
+            id, topic_id, created_by, updated_by, created_at, updated_at
+            FROM posts
+            WHERE topic_id IN (SELECT id FROM TopicsOnSection)
+            ORDER BY topic_id, created_at DESC
         )
-        SELECT section_tree.id, section_tree.parent_section_id, section_tree.updated_by, section_tree.title, section_tree.description, section_tree.locked, section_tree.created_at, section_tree.updated_at, topics.id as topic_id, topics.created_by as topic_created_by, topics.updated_by as topic_updated_by, topics.section_id, topics.locked as topic_locked, topics.title as topic_title, topics.created_at as topic_created_at, topics.updated_at  as topic_updated_at
+        SELECT  section_tree.id,
+            section_tree.parent_section_id,
+            section_tree.updated_by,
+            section_tree.title,
+            section_tree.description,
+            section_tree.locked,
+            section_tree.created_at,
+            section_tree.updated_at,
+            TopicsOnSection.id AS topic_id,
+            TopicsOnSection.created_by AS topic_created_by,
+            TopicsOnSection.updated_by AS topic_updated_by,
+            TopicsOnSection.title AS topic_title,
+            TopicsOnSection.locked AS topic_locked,
+            TopicsOnSection.created_at AS topic_created_at,
+            TopicsOnSection.updated_at AS topic_updated_at,
+            RecentPosts.id AS post_id,
+            RecentPosts.created_by AS post_created_by,
+            RecentPosts.updated_by AS post_updated_by,
+            RecentPosts.created_at AS post_created_at,
+            RecentPosts.updated_at AS post_updated_at
         FROM section_tree
-        LEFT JOIN topics ON section_tree.id = topics.section_id;
+         LEFT JOIN TopicsOnSection ON section_tree.id = TopicsOnSection.section_id
+         LEFT JOIN RecentPosts ON TopicsOnSection.id = RecentPosts.topic_id;
     "#;
 
         let rows = sqlx::query(query)
@@ -116,15 +175,23 @@ impl Section {
 
         let topics = rows.iter().filter_map(|row| {
             let topic_id: Option<Uuid> = row.get("topic_id");
-            topic_id.map(|id| Topic {
-                id,
-                created_by: row.get("topic_created_by"),
-                section_id: row.get("id"),
-                updated_by: row.get("topic_updated_by"),
-                locked: row.get("topic_locked"),
-                title: row.get("topic_title"),
-                created_at: row.get("topic_created_at"),
-                updated_at: row.get("topic_updated_at"),
+            topic_id.map(|id| TopicPreview {
+                topic: Topic {
+                    id,
+                    created_by: row.get("topic_created_by"),
+                    section_id: row.get("id"),
+                    updated_by: row.get("topic_updated_by"),
+                    locked: row.get("topic_locked"),
+                    title: row.get("topic_title"),
+                    created_at: row.get("topic_created_at"),
+                    updated_at: row.get("topic_updated_at"),
+                },
+                most_recent_post: PostPreview {
+                    id: row.get("post_id"),
+                    created_by: row.get("post_created_by"),
+                    created_at: row.get("post_created_at"),
+                    updated_at: row.get("post_updated_at"),
+                },
             })
         }).collect();
 

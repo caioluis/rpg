@@ -12,7 +12,7 @@ import {
 
 interface SectionData {
     section: Section;
-    topics: Topic[]
+    topics: TopicPreview[]
     children_sections: Section[];
 }
 
@@ -25,6 +25,18 @@ interface Topic {
     title: string;
     created_at: Date; // DateTime<Utc>
     updated_at?: Date; // Optional DateTime<Utc>
+}
+
+interface MostRecentPost {
+    id: string; // Uuid
+    created_by: string; // Uuid
+    created_at: Date; // DateTime<Utc>
+    updated_by?: string; // Optional Uuid
+}
+
+interface TopicPreview {
+    topic: Topic;
+    most_recent_post: MostRecentPost;
 }
 
 interface Section {
@@ -65,13 +77,15 @@ export default async function Section({params}: { params: { id: string } }) {
                 <TableRow>
                     <TableHead>Título</TableHead>
                     <TableHead>Autor do tópico</TableHead>
+                    <TableHead>Último post</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data.topics.map((topic) => (
-                    <TableRow key={topic.id}>
-                        <TableCell>{topic.title}</TableCell>
-                        <TableCell>{topic.created_by}</TableCell>
+                {data.topics.map((topicPreview) => (
+                    <TableRow key={topicPreview.topic.id}>
+                        <TableCell>{topicPreview.topic.title}</TableCell>
+                        <TableCell>{topicPreview.topic.created_by}</TableCell>
+                        <TableCell>{topicPreview.most_recent_post.id}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
