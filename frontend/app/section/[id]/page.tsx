@@ -9,6 +9,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
+import {Button} from "@/components/Button";
+import {GoTo} from "@/components/navigation/GoTo";
+import Link from "next/link";
 
 interface SectionData {
     section: Section;
@@ -68,27 +72,49 @@ async function getSectionData(id: string): Promise<SectionData> {
     return await res.json();
 }
 
+// TODO: make photo redirect to user profile
+
 export default async function Section({params}: { params: { id: string } }) {
     const data = await getSectionData(params.id);
     return (
-        <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>Título</TableHead>
-                    <TableHead>Autor do tópico</TableHead>
-                    <TableHead>Último post</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {data.topics.map((topicPreview) => (
-                    <TableRow key={topicPreview.topic.id}>
-                        <TableCell>{topicPreview.topic.title}</TableCell>
-                        <TableCell>{topicPreview.topic.created_by}</TableCell>
-                        <TableCell>{topicPreview.most_recent_post.id}</TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+        <div className="flex flex-col items-center">
+            <h1 className="text-4xl font-bold">{data.section.title}</h1>
+            <div className="w-10/12 xl:w-3/5 mt-6">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Título</TableHead>
+                            <TableHead>Autor do tópico</TableHead>
+                            <TableHead className="text-right">Último post</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {data.topics.map((topicPreview) => (
+                            <TableRow key={topicPreview.topic.id}>
+                                <TableCell>
+                                        <Link href={`/topic/${topicPreview.topic.id}`}>
+                                            {topicPreview.topic.title}
+                                        </Link>
+                                    </TableCell>
+                                <TableCell>
+                                    <Link href={`/#`}>
+                                         Nome do autor
+                                    </Link>
+                                </TableCell>
+                                <TableCell className="flex justify-end items-center gap-2">
+                                    <Link href={`/#`}>
+                                        <Avatar>
+                                            <AvatarImage src="https://placehold.co/100" alt="Dattebayo!" />
+                                            <AvatarFallback>D</AvatarFallback>
+                                        </Avatar>
+                                    </Link>
+                                    <GoTo />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+        </div>
     )
 }
