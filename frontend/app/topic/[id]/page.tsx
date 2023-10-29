@@ -1,5 +1,7 @@
 "use client"
 import Image from "next/image";
+import Tiptap from "@/components/Tiptap";
+
 
 interface SectionData {
     section: Section;
@@ -40,7 +42,7 @@ interface Section {
     created_at: Date; // DateTime<Utc>
     updated_at?: Date; // Optional DateTime<Utc>
 }
-export default function Topic({params}: { params: { id: string } }) {
+export default function Topic() {
     return (
         <>
             <div className="max-w-sm mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden md:max-w-2xl transform transition duration-500 hover:scale-105">
@@ -71,6 +73,9 @@ export default function Topic({params}: { params: { id: string } }) {
                         Alguma informação sobre o post
                     </div>
                 </div>
+            </div>
+            <div className="mt-4 max-w-sm mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden md:max-w-2xl">
+                <Tiptap />
             </div>
         </>
     )
