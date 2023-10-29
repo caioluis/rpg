@@ -1,12 +1,11 @@
-"use client"
 import Image from "next/image";
 import Tiptap from "@/components/Tiptap";
+import { cookies } from "next/headers";
 
 
-interface SectionData {
-    section: Section;
-    topics: TopicPreview[]
-    children_sections: Section[];
+interface TopicData {
+    topic: Topic;
+    posts: Post[];
 }
 
 interface Topic {
@@ -20,32 +19,41 @@ interface Topic {
     updated_at?: Date; // Optional DateTime<Utc>
 }
 
-interface MostRecentPost {
+interface Post {
     id: string; // Uuid
     created_by: string; // Uuid
-    created_at: Date; // DateTime<Utc>
     updated_by?: string; // Optional Uuid
-}
-
-interface TopicPreview {
-    topic: Topic;
-    most_recent_post: MostRecentPost;
-}
-
-interface Section {
-    id: string; // Uuid
-    parent_section_id?: string; // Optional Uuid
-    updated_by?: string; // Optional Uuid
-    title: string;
-    description: string;
-    locked: boolean;
+    topic_id: string; // Uuid
+    content: string;
     created_at: Date; // DateTime<Utc>
     updated_at?: Date; // Optional DateTime<Utc>
 }
-export default function Topic() {
+
+async function getTopicData(id: string): Promise<TopicData> {
+    const hanko_cookie = cookies().get('hanko')?.value;
+    const res = await fetch(`http://127.0.0.1:3000/core/topic/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Cookie': `hanko=${hanko_cookie}`
+        }
+    });
+
+    if (!res.ok) {
+        console.error(`Failed to fetch topic data. Status: ${res.status}`);
+        throw new Error('Failed to fetch topic data');
+    }
+
+    return await res.json();
+}
+
+export default async function Topic({params}: { params: { id: string } }) {
+    const data = await getTopicData(params.id);
+
     return (
-        <>
-            <div className="max-w-sm mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden md:max-w-2xl transform transition duration-500 hover:scale-105">
+        <div className="flex flex-col">
+            <h1 className="text-2xl font-bold text-neutral-200 self-center">{data.topic.title}</h1>
+            <div className="mt-6 max-w-xs mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden md:max-w-[800px] transform transition duration-500 hover:scale-105">
                 <div className="md:flex">
                     <div className="md:flex-shrink-0">
                         {/* TODO: maybe make it the vertical 16/9 banner in mobile */}
@@ -56,10 +64,10 @@ export default function Topic() {
                             src="https://placehold.co/192x341.png"
                         />
                     </div>
-                    <div className="p-8">
+                    <div className="p-8 w-full">
                         {/* TODO: perhaps apply the color of the user's group to the name instead */}
                         <h2 className="uppercase tracking-wide text-sm text-neutral-400 font-bold">Nome do autor do post</h2>
-                        <p className="max-h-64 text-neutral-300 overflow-y-scroll">
+                        <p className="max-h-64 text-neutral-300 overflow-y-scroll min-w-9/12 md:min-w-full">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
@@ -68,15 +76,15 @@ export default function Topic() {
                         </p>
                     </div>
                 </div>
-                <div className="border-t-2 border-gray-200 border-neutral-700 p-2 bg-neutral-800">
+                <div className="border-t-2 border-neutral-700 p-2 bg-neutral-800">
                     <div className="text-neutral-400 m-0.5">
                         Alguma informação sobre o post
                     </div>
                 </div>
             </div>
-            <div className="mt-4 max-w-sm mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden md:max-w-2xl">
+            <div className="flex flex-col mt-4 max-w-xs mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden w-11/12 md:max-w-[800px]">
                 <Tiptap />
             </div>
-        </>
+        </div>
     )
 }

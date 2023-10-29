@@ -9,6 +9,11 @@ import StarterKit from '@tiptap/starter-kit'
 import {cn} from "@/lib/utils";
 import {useState} from "react";
 
+interface PostInfo {
+    created_by: string;
+    topic_id: string;
+}
+
 const Tiptap = () => {
     const editor = useEditor({
         extensions: [
@@ -38,7 +43,7 @@ const Tiptap = () => {
 
     return (
         <>
-            <div className="flex space-x-2 p-2 border-b border-neutral-200">
+            <div className="flex space-x-2 p-2 border-b border-neutral-200 w-full">
                 <Button className={cn("text-neutral-400", editor?.isActive('bold') ? "bg-neutral-950" : "")} variant="secondary" onClick={
                     () => {
                         editor?.chain().focus().toggleBold().run()
@@ -134,6 +139,12 @@ const Tiptap = () => {
                 </Button>
             </div>
             <EditorContent editor={editor} />
+            <div className="flex flex-col w-full border-t-2 border-t-neutral-700">
+                <Button variant={"secondary"} className="w-fit self-end" onClick={() => {
+                    console.log(editor?.getHTML())
+                }
+                }>Enviar</Button>
+            </div>
         </>
     )
 }
