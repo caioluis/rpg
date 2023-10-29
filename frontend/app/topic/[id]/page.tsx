@@ -1,18 +1,5 @@
-import { cookies } from 'next/headers'
-
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
-import {GoTo} from "@/components/navigation/GoTo";
-import Link from "next/link";
-import {Button} from "@/components/Button";
+"use client"
+import Image from "next/image";
 
 interface SectionData {
     section: Section;
@@ -53,28 +40,28 @@ interface Section {
     created_at: Date; // DateTime<Utc>
     updated_at?: Date; // Optional DateTime<Utc>
 }
-export default async function Topic({params}: { params: { id: string } }) {
+export default function Topic({params}: { params: { id: string } }) {
     return (
+        <>
             <div className="max-w-sm mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden md:max-w-2xl transform transition duration-500 hover:scale-105">
                 <div className="md:flex">
                     <div className="md:flex-shrink-0">
-                        {/* TODO: make the round-y profile picture so it can be 100x100 little circle in lower resolutions*/}
-                        <img
+                        {/* TODO: maybe make it the vertical 16/9 banner in mobile */}
+                        <Image
                             alt="Profile Picture"
-                            className="h-48 w-full object-cover md:h-full md:w-48"
-                            height="160"
-                            src="https://placehold.co/90x160"
-                            style={{
-                                aspectRatio: "9/16",
-                                objectFit: "cover",
-                            }}
-                            width="48"
+                            width={192}
+                            height={341}
+                            src="https://placehold.co/192x341.png"
                         />
                     </div>
                     <div className="p-8">
-                        {/* TODO: perhaps apply the color of the user's group to the name instead*/}
-                        <div className="uppercase tracking-wide text-sm text-neutral-400 font-bold">Nome do autor do post</div>
-                        <p className="mt-2 text-neutral-300">
+                        {/* TODO: perhaps apply the color of the user's group to the name instead */}
+                        <h2 className="uppercase tracking-wide text-sm text-neutral-400 font-bold">Nome do autor do post</h2>
+                        <p className="max-h-64 text-neutral-300 overflow-y-scroll">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
                         </p>
                     </div>
@@ -85,5 +72,6 @@ export default async function Topic({params}: { params: { id: string } }) {
                     </div>
                 </div>
             </div>
+        </>
     )
 }
