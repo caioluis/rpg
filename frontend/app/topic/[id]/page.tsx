@@ -53,7 +53,7 @@ interface Section {
     created_at: Date; // DateTime<Utc>
     updated_at?: Date; // Optional DateTime<Utc>
 }
-export default async function Section({params}: { params: { id: string } }) {
+export default async function Topic({params}: { params: { id: string } }) {
     return (
             <div className="max-w-sm mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden md:max-w-2xl transform transition duration-500 hover:scale-105">
                 <div className="md:flex">
