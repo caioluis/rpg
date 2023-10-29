@@ -3,7 +3,11 @@
 import { Button } from './Button'
 import { useEditor, EditorContent } from '@tiptap/react'
 import { Paragraph } from "@tiptap/extension-paragraph";
+import { Underline } from '@tiptap/extension-underline'
+import { BulletList } from "@tiptap/extension-bullet-list";
 import StarterKit from '@tiptap/starter-kit'
+import {cn} from "@/lib/utils";
+import {useState} from "react";
 
 const Tiptap = () => {
     const editor = useEditor({
@@ -14,6 +18,14 @@ const Tiptap = () => {
                     class: 'text-neutral-300',
                 },
             }),
+            BulletList.configure(
+                {
+                    HTMLAttributes: {
+                        class: 'list-disc ml-6',
+                    },
+                }
+            ),
+            Underline,
         ],
         content: '<p>Inicie o seu post!</p>',
 
@@ -27,7 +39,11 @@ const Tiptap = () => {
     return (
         <>
             <div className="flex space-x-2 p-2 border-b border-neutral-200">
-                <Button className="text-neutral-600 dark:text-neutral-400" variant="secondary">
+                <Button className={cn("text-neutral-400", editor?.isActive('bold') ? "bg-neutral-950" : "")} variant="secondary" onClick={
+                    () => {
+                        editor?.chain().focus().toggleBold().run()
+                    }
+                }>
                     <span className="sr-only">Bold</span>
                     <svg
                         className="w-4 h-4"
@@ -45,7 +61,11 @@ const Tiptap = () => {
                         <path d="M15 20a4 4 0 0 0 0-8H6v8Z" />
                     </svg>
                 </Button>
-                <Button className="text-neutral-600 dark:text-neutral-400" variant="secondary">
+                <Button className={cn("text-neutral-400", editor?.isActive('italic') ? "bg-neutral-950" : "")} variant="secondary" onClick={
+                    () => {
+                        editor?.chain().focus().toggleItalic().run()
+                    }
+                }>
                     <span className="sr-only">Italic</span>
                     <svg
                         className="w-4 h-4"
@@ -64,7 +84,11 @@ const Tiptap = () => {
                         <line x1="15" x2="9" y1="4" y2="20" />
                     </svg>
                 </Button>
-                <Button className="text-neutral-600 dark:text-neutral-400" variant="secondary">
+                <Button className={cn("text-neutral-400", editor?.isActive('underline') ? "bg-neutral-950" : "")} variant="secondary" onClick={
+                    () => {
+                        editor?.chain().focus().toggleUnderline().run()
+                    }
+                }>
                     <span className="sr-only">Underline</span>
                     <svg
                         className="w-4 h-4"
@@ -82,7 +106,11 @@ const Tiptap = () => {
                         <line x1="4" x2="20" y1="20" y2="20" />
                     </svg>
                 </Button>
-                <Button className="text-neutral-600 dark:text-neutral-400" variant="secondary">
+                <Button className={cn("text-neutral-400", editor?.isActive('bulletList') ? "bg-neutral-950" : "")} variant="secondary" onClick={
+                    () => {
+                        editor?.chain().focus().toggleBulletList().run()
+                    }
+                }>
                     <span className="sr-only">Bulleted List</span>
                     <svg
                         className="w-4 h-4"

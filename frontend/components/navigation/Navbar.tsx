@@ -47,7 +47,7 @@ export default function Navbar() {
                                 </div>
                                 <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
                                     <Link href="/" className="nav-link active">Início</Link>
-                                    <Link href="/section/offtopic" className="nav-link">Off-topic</Link>
+                                    <Link href="/section/4f6b0fa3-e6d2-48fe-852c-f9829512d75d" className="nav-link">Off-topic</Link>
                                 </div>
                             </div>
                             {/* TODO: Reinstall when search is implemented */}
