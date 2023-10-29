@@ -53,35 +53,33 @@ export default async function Topic({params}: { params: { id: string } }) {
     return (
         <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-neutral-200 self-center">{data.topic.title}</h1>
-            <div className="mt-6 max-w-xs mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden md:max-w-[800px] transform transition duration-500 hover:scale-105">
-                <div className="md:flex">
-                    <div className="md:flex-shrink-0">
-                        {/* TODO: maybe make it the vertical 16/9 banner in mobile */}
-                        <Image
-                            alt="Profile Picture"
-                            width={192}
-                            height={341}
-                            src="https://placehold.co/192x341.png"
-                        />
+            {data.posts.map((post) => (
+                <>
+                    <div className="mt-6 max-w-xs mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden md:max-w-[800px] transform transition duration-500 hover:scale-105">
+                        <div className="md:flex">
+                            <div className="md:flex-shrink-0">
+                                {/* TODO: maybe make it the vertical 16/9 banner in mobile */}
+                                <Image
+                                    alt="Profile Picture"
+                                    width={192}
+                                    height={341}
+                                    src="https://placehold.co/192x341.png"
+                                />
+                            </div>
+                            <div className="p-8 w-full">
+                                {/* TODO: perhaps apply the color of the user's group to the name instead */}
+                                <h2 className="uppercase tracking-wide text-sm text-neutral-400 font-bold">{post.created_by}</h2>
+                                {post.content}
+                            </div>
+                        </div>
+                        <div className="border-t-2 border-neutral-700 p-2 bg-neutral-800">
+                            <div className="text-neutral-400 m-0.5">
+                                Alguma informação sobre o post talvez?
+                            </div>
+                        </div>
                     </div>
-                    <div className="p-8 w-full">
-                        {/* TODO: perhaps apply the color of the user's group to the name instead */}
-                        <h2 className="uppercase tracking-wide text-sm text-neutral-400 font-bold">Nome do autor do post</h2>
-                        <p className="max-h-64 text-neutral-300 overflow-y-scroll min-w-9/12 md:min-w-full">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris egestas quam volutpat viverra. In pretium nec senectus erat. Et malesuada lobortis.
-                        </p>
-                    </div>
-                </div>
-                <div className="border-t-2 border-neutral-700 p-2 bg-neutral-800">
-                    <div className="text-neutral-400 m-0.5">
-                        Alguma informação sobre o post
-                    </div>
-                </div>
-            </div>
+                </>
+            ))}
             <div className="flex flex-col mt-4 max-w-xs mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden w-11/12 md:max-w-[800px]">
                 <Tiptap />
             </div>
