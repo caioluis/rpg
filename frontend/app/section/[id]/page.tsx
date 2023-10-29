@@ -10,7 +10,6 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import {Avatar, AvatarImage, AvatarFallback} from "@/components/ui/avatar";
-import {Button} from "@/components/Button";
 import {GoTo} from "@/components/navigation/GoTo";
 import Link from "next/link";
 
@@ -108,7 +107,10 @@ export default async function Section({params}: { params: { id: string } }) {
                                             <AvatarFallback>D</AvatarFallback>
                                         </Avatar>
                                     </Link>
-                                    <GoTo />
+                                    {/* TODO: make it go directly to the page location the post is*/}
+                                    <Link href={`/topic/${topicPreview.topic.id}`}>
+                                        <GoTo />
+                                    </Link>
                                 </TableCell>
                             </TableRow>
                         ))}
