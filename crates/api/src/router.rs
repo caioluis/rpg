@@ -1,5 +1,4 @@
-use axum;
-use axum::{middleware, Router};
+use axum::{self, middleware, Router};
 use anyhow::{
     Context,
     Result
@@ -25,7 +24,6 @@ impl Controller {
             .route("/", axum::routing::get(|| async { "Hello, world!" }))
             .route_layer(middleware::from_fn(auth_middleware::auth));
 
-        // PORT or 3000
         let port_env = std::env::var("PORT").unwrap_or_else(|_| "3000".to_string());
         let port = port_env.parse::<u16>().expect("Couldn't parse PORT");
 

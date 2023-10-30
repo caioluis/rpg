@@ -312,16 +312,37 @@ impl Topic {
     pub async fn get_topic_data(pool: PgPool, topic_id: Uuid) -> DBResult<TopicData> {
         let query = r#"
             SELECT
-                topics.id as topic_id, topics.created_by as topic_created_by, topics.updated_by as topic_updated_by, topics.section_id as topic_section_id, topics.locked as topic_locked, topics.title as topic_title, topics.created_at as topic_created_at, topics.updated_at as topic_updated_at,
-                posts.id as post_id, posts.topic_id as post_topic_id, posts.created_by as post_created_by, posts.updated_by as post_updated_by, posts.content as post_content, posts.created_at as post_created_at, posts.updated_at as post_updated_at
+                topics.id as topic_id,
+                topics.created_by as topic_created_by,
+                topics.updated_by as topic_updated_by,
+                topics.section_id as topic_section_id,
+                topics.locked as topic_locked,
+                topics.title as topic_title,
+                topics.created_at as topic_created_at,
+                topics.updated_at as topic_updated_at,
+                posts.id as post_id,
+                posts.topic_id as post_topic_id,
+                posts.created_by as post_created_by,
+                posts.updated_by as post_updated_by,
+                posts.content as post_content,
+                posts.created_at as post_created_at,
+                posts.updated_at as post_updated_at,
+                creator.username as creator_username,
+                updater.username as updater_username
             FROM
                 topics
-            LEFT JOIN
+                    LEFT JOIN
                 posts ON topics.id = posts.topic_id
+                    LEFT JOIN
+                users as creator ON topics.created_by = creator.id OR posts.created_by = creator.id
+                    LEFT JOIN
+                users as updater ON topics.updated_by = updater.id OR posts.updated_by = updater.id
+                    LEFT JOIN
+                user_roles ON creator.id = user_roles.user_id OR updater.id = user_roles.user_id
             WHERE
-                topics.id = $1
+                    topics.id = $1
             ORDER BY
-                posts.created_at ASC;
+                posts.created_at;
         "#;
 
         let rows = sqlx::query(query)
