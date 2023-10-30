@@ -11,7 +11,7 @@ async fn main() -> Result<()> {
 
     let pool = sqlx::postgres::PgPoolOptions::new()
         .max_connections(50)
-        .acquire_timeout(std::time::Duration::from_secs(3))
+        .acquire_timeout(std::time::Duration::from_secs(30))
         .connect(&db_connection_str)
         .await
         .expect("Failed to connect to Postgres");
