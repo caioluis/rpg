@@ -1,0 +1,12 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            WITH CurrentMonthTransactions AS (\n                SELECT\n                    account_id,\n                    COALESCE(SUM(CASE WHEN transaction_type = 'DEPOSIT' THEN amount ELSE -amount END), 0)::bigint AS current_balance\n                FROM banking_transactions\n                WHERE EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM NOW())\n                  AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM NOW())\n                GROUP BY account_id\n            ),\n            PreviousMonthBalance AS (\n                SELECT\n                    account_id,\n                    COALESCE(balance, 0) AS previous_balance\n                FROM banking_accounts_statements\n                WHERE (EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM NOW()) - 1\n                       AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM NOW()))\n                    OR (EXTRACT(MONTH FROM created_at) = 12\n                        AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM NOW()) - 1)\n            )\n            INSERT INTO banking_accounts_statements (account_id, balance)\n            SELECT\n                cm.account_id,\n                COALESCE(cm.current_balance, 0) + COALESCE(pb.previous_balance, 0) AS balance\n            FROM CurrentMonthTransactions cm\n            LEFT JOIN PreviousMonthBalance pb\n            ON cm.account_id = pb.account_id;\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": []
+  },
+  "hash": "43ba774e558a4a0858489facd27a3a8b0975a1380095c0b4e587a666eb17b526"
+}
