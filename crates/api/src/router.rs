@@ -25,8 +25,8 @@ impl Controller {
             .route("/", axum::routing::get(|| async { "Hello, world!" }))
             .route_layer(middleware::from_fn(auth_middleware::auth));
 
-        let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-        println!("Listening on {}", addr);
+        let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+        println!("Listening prod on {}", addr);
 
         axum::Server::bind(&addr)
             .serve(router.into_make_service())
