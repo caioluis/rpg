@@ -1,10 +1,15 @@
-FROM rust:latest as builder
-COPY ./Cargo.lock ./Cargo.toml ./
+FROM rust:bookworm as builder
+COPY ./Cargo.lock ./Cargo.toml ./.infisical.json ./
 COPY ./crates ./crates
+COPY ./.sqlx ./.sqlx
+RUN apt-get update && apt-get install -y bash curl && curl -1sLf \
+'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' | bash \
+&& apt-get update && apt-get install -y infisical
 RUN cargo build --release
+RUN chmod +x ./target/release/bin
 
-FROM debian:buster-slim
+FROM debian:bookworm-slim
+RUN apt-get update && apt install -y openssl
+COPY --from=builder ./target/release/bin ./dattebayo/bin
 
-COPY --from=builder ./target/release/dattebayo ./target/release/dattebayo
-
-CMD ["/target/release/dattebayo"]
+CMD ["./dattebayo/bin"]
