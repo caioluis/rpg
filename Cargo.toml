@@ -3,6 +3,3 @@ members = [
     "crates/*",
 ]
 resolver = "2"
-
-[profile.release]
-debug = true
