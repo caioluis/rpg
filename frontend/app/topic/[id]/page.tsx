@@ -29,13 +29,12 @@ interface Post {
     updated_at?: Date; // Optional DateTime<Utc>
 }
 
-async function getTopicData(id: string): Promise<TopicData> {
-    const hanko_cookie = cookies().get('hanko')?.value;
+async function getTopicData(id: string, cookie: string): Promise<TopicData> {
     const res = await fetch(`http://127.0.0.1:3000/core/topic/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Cookie': `hanko=${hanko_cookie}`
+            'Cookie': `hanko=${cookie}`
         }
     });
 
@@ -48,7 +47,9 @@ async function getTopicData(id: string): Promise<TopicData> {
 }
 
 export default async function Topic({params}: { params: { id: string } }) {
-    const data = await getTopicData(params.id);
+    // TODO: handle this better later on x.x
+    const hanko_cookie = cookies().get('hanko')?.value || "";
+    const data = await getTopicData(params.id, hanko_cookie);
 
     return (
         <div className="flex flex-col">
@@ -81,7 +82,7 @@ export default async function Topic({params}: { params: { id: string } }) {
                 </>
             ))}
             <div className="flex flex-col mt-4 max-w-xs mx-auto bg-neutral-800 rounded-xl shadow-lg overflow-hidden w-11/12 md:max-w-[800px]">
-                <Tiptap />
+                <Tiptap topicId={data.topic.id} cookie={hanko_cookie} />
             </div>
         </div>
     )
