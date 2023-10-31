@@ -1,10 +1,7 @@
-import HankoAuth from "@/components/HankoAuth";
+import dynamic from 'next/dynamic';
+const HankoAuth = dynamic(() => import('@/components/HankoAuth'), { ssr: false })
 import { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
-
-import { cn } from "@/lib/utils"
-
 export const metadata: Metadata = {
     title: "Login",
     description: "Faça (login) ou crie uma conta no Dattebayo!",
