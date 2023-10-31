@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "infisical run -- next dev -p 3001",
+    "dev": "infisical run --env=dev -- next dev -p 3001",
     "build": "infisical run -- next build -p 3001",
     "start": "infisical run -- next start -p 3001",
     "lint": "infisical run -- next lint"
@@ -24,6 +24,7 @@
     "@tiptap/starter-kit": "^2.1.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.286.0",
     "next": "13.5.4",

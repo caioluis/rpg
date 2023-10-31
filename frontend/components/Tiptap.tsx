@@ -15,7 +15,7 @@ interface PostInfo {
 }
 
 async function SendPost(topicId: string, content: string, cookie: string) {
-    const res = await fetch(`http://127.0.0.1:3000/core/topic/${topicId}`, {
+    const res = await fetch(`${process.env.API_URL}/core/topic/${topicId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

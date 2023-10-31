@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Tiptap from "@/components/Tiptap";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 
 interface TopicData {
@@ -22,7 +23,9 @@ interface Topic {
 interface Post {
     id: string; // Uuid
     created_by: string; // Uuid
+    created_by_username: string;
     updated_by?: string; // Optional Uuid
+    updated_by_username?: string; // Optional Uuid
     topic_id: string; // Uuid
     content: string;
     created_at: Date; // DateTime<Utc>
@@ -30,7 +33,7 @@ interface Post {
 }
 
 async function getTopicData(id: string, cookie: string): Promise<TopicData> {
-    const res = await fetch(`http://127.0.0.1:3000/core/topic/${id}`, {
+    const res = await fetch(`${process.env.API_URL}/core/topic/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -51,6 +54,12 @@ export default async function Topic({params}: { params: { id: string } }) {
     const hanko_cookie = cookies().get('hanko')?.value || "";
     const data = await getTopicData(params.id, hanko_cookie);
 
+    // TODO: I can move this to a comnmon lib later
+    const timeFormatter = new Intl.DateTimeFormat('pt-BR', {
+        timeStyle: "medium",
+        dateStyle: "short",
+    });
+     
     return (
         <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-neutral-200 self-center">{data.topic.title}</h1>
@@ -69,13 +78,15 @@ export default async function Topic({params}: { params: { id: string } }) {
                             </div>
                             <div className="p-8 w-full">
                                 {/* TODO: perhaps apply the color of the user's group to the name instead */}
-                                <h2 className="uppercase tracking-wide text-sm text-neutral-400 font-bold">{post.created_by}</h2>
+                                <Link href={`/user/${post.created_by}`}>
+                                    <h2 className="uppercase tracking-wide text-lg text-neutral-400 font-bold">{post.created_by_username}</h2>
+                                </Link>
                                 {post.content}
                             </div>
                         </div>
                         <div className="border-t-2 border-neutral-700 p-2 bg-neutral-800">
                             <div className="text-neutral-400 m-0.5">
-                                Alguma informação sobre o post talvez?
+                                {timeFormatter.format(new Date(post.created_at))}
                             </div>
                         </div>
                     </div>

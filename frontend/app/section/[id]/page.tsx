@@ -55,7 +55,7 @@ interface Section {
 
 async function getSectionData(id: string): Promise<SectionData> {
     const hanko_cookie = cookies().get('hanko')?.value;
-    const res = await fetch(`http://127.0.0.1:3000/core/section/${id}`, {
+    const res = await fetch(`${process.env.API_URL}/core/section/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

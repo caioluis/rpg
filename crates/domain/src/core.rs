@@ -32,7 +32,9 @@ pub struct Post {
     pub id: Uuid,
     pub topic_id: Uuid,
     pub created_by: Uuid,
+    pub created_by_username: String,
     pub updated_by: Option<Uuid>,
+    pub updated_by_username: Option<String>,
     pub content: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: Option<DateTime<Utc>>,
@@ -260,7 +262,9 @@ impl Section {
                     id: row.get("post_id"),
                     topic_id: row.get("topic_id"),
                     created_by: row.get("post_created_by"),
+                    created_by_username: row.get("post_created_by_username"),
                     updated_by: row.get("post_updated_by"),
+                    updated_by_username: row.get("post_updated_by_username"),
                     content: row.get("post_content"),
                     created_at: row.get("post_created_at"),
                     updated_at: row.get("post_updated_at"),
@@ -327,18 +331,18 @@ impl Topic {
                 posts.content as post_content,
                 posts.created_at as post_created_at,
                 posts.updated_at as post_updated_at,
-                creator.username as creator_username,
-                updater.username as updater_username
+                created_by_username.username as creator_username,
+                updated_by_username.username as updater_username
             FROM
                 topics
                     LEFT JOIN
                 posts ON topics.id = posts.topic_id
                     LEFT JOIN
-                users as creator ON topics.created_by = creator.id OR posts.created_by = creator.id
+                users as created_by_username ON topics.created_by = created_by_username.id OR posts.created_by = created_by_username.id
                     LEFT JOIN
-                users as updater ON topics.updated_by = updater.id OR posts.updated_by = updater.id
+                users as updated_by_username ON topics.updated_by = updated_by_username.id OR posts.updated_by = updated_by_username.id
                     LEFT JOIN
-                user_roles ON creator.id = user_roles.user_id OR updater.id = user_roles.user_id
+                user_roles ON created_by_username.id = user_roles.user_id OR created_by_username.id = user_roles.user_id
             WHERE
                     topics.id = $1
             ORDER BY
@@ -372,7 +376,9 @@ impl Topic {
                     id: post_id,
                     topic_id: row.get("post_topic_id"),
                     created_by: row.get("post_created_by"),
+                    created_by_username: row.get("creator_username"),
                     updated_by: row.get("post_updated_by"),
+                    updated_by_username: row.get("updater_username"),
                     content: row.get("post_content"),
                     created_at: row.get("post_created_at"),
                     updated_at: row.get("post_updated_at"),
