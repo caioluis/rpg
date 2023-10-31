@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "infisical run --env=dev -- next dev -p 3001",
-    "build": "infisical run -- next build -p 3001",
-    "start": "infisical run -- next start -p 3001",
-    "lint": "infisical run -- next lint"
+    "dev": "infisical run --env=dev -- next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
